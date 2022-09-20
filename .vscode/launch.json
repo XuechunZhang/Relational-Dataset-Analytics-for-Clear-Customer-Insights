@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "TrainingCluster",
+            "type": "ecl",
+            "request": "launch",
+            "protocol": "http",
+            "serverAddress": "training2.hpcc.risk.regn.net",
+            "port": 18010,
+            "targetCluster": "thor",
+            "rejectUnauthorized": true,
+            "resultLimit": 100,
+            "timeoutSecs": 60,
+            "user": "Bob",
+            "password": ""
+        },
+        {
+            "name": "PlayCluster",
+            "type": "ecl",
+            "request": "launch",
+            "protocol": "http",
+            "serverAddress": "play.hpccsystems.com",
+            "port": 8010,
+            "targetCluster": "thor",
+            "rejectUnauthorized": true,
+            "resultLimit": 100,
+            "timeoutSecs": 60,
+            "user": "gitpod_user",
+            "password": ""
+        }
+    ]
+}
