@@ -24,7 +24,9 @@ vscode:
     - https://github.com/hpcc-systems/vscode-ecl/releases/latest/download/hpcc-systems.ecl.vsix
     - https://github.com/GordonSmith/vscode-ojs/releases/latest/download/gordonsmith.observable-js.vsix
 
-
+tasks:
+  - name: Start HPCC-Systems Platform
+    command: sudo /etc/init.d/hpcc-init start
 
 
 
