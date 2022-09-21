@@ -25,6 +25,7 @@ Layout_PeopleVehicles ParentMove2($.File_People.Layout Le) := TRANSFORM
   SELF := Le;
  END;
 PVOnly := PROJECT($.File_People.File, ParentMove2(LEFT));
+
 Layout_PeopleVehicles ChildMove2(Layout_PeopleVehicles Le,
                                  $.File_Vehicle.Layout Ri,
                                  UNSIGNED1 Cnt):= TRANSFORM
@@ -36,7 +37,7 @@ PVDenorm := DENORMALIZE(PVOnly,
                         $.File_Vehicle.File,
                         LEFT.id = RIGHT.personid,
                         ChildMove2(LEFT,RIGHT,COUNTER))
-                        :PERSIST('~CLASS::BMF::PERSIST::PeopleVehicles');
+                        :PERSIST('~ODSCWest::PERSIST::PeopleVehicles');
 PV_DNOut := OUTPUT(PVDenorm);                        
 
 
@@ -46,6 +47,7 @@ PV_DNOut := OUTPUT(PVDenorm);
   SELF := Le;
  END;
  PropTaxOnly := PROJECT($.File_Property.File, ParentMove(LEFT));
+ 
  Layout_PropTax ChildMove(Layout_PropTax Le, $.File_Taxdata.Layout Ri, INTEGER Cnt):=TRANSFORM
   SELF.ChildTaxCount := Cnt;
   SELF.TaxRecs       := Le.TaxRecs + Ri;
@@ -55,18 +57,19 @@ PV_DNOut := OUTPUT(PVDenorm);
                             $.File_TaxData.File,
                             LEFT.propertyid = RIGHT.propertyid,
                             ChildMove(LEFT,RIGHT,COUNTER))
-                            :PERSIST('~CLASS::BMF::PERSIST::PropTax');
+                            :PERSIST('~ODSCWest::PERSIST::PropTax');
 PT_DNOut := OUTPUT(DenormProp);
 
-Layout_PeopleAll ParentMove3($.DenormPeopleVehicles.Layout_PeopleVehicles Le) := TRANSFORM
+Layout_PeopleAll ParentMove3(Layout_PeopleVehicles Le) := TRANSFORM
   SELF.ChildPcount := 0;
   SELF.PropRecs    := [];
   SELF := Le;
  END;
- ParentOnly := PROJECT($.DenormPeopleVehicles.File, ParentMove3(LEFT));
+ ParentOnly := PROJECT(PVDenorm, ParentMove3(LEFT));
+ 
  Layout_PeopleAll ChildMove3(Layout_PeopleAll Le, 
-                            $.DenormProp.Layout_Proptax Ri, 
-                            INTEGER Cnt):=TRANSFORM
+                             Layout_Proptax Ri, 
+                             INTEGER Cnt):=TRANSFORM
   SELF.ChildPcount := Cnt;
   SELF.PropRecs    := Le.PropRecs + Ri;
   SELF := Le;
@@ -76,4 +79,4 @@ Layout_PeopleAll ParentMove3($.DenormPeopleVehicles.Layout_PeopleVehicles Le) :=
                                  LEFT.id = RIGHT.personid,
                                  ChildMove3(LEFT,RIGHT,COUNTER));
 
-OUTPUT(Denorm_PeopleAll,,'~CLASS::BMF::OUT::PeopleAll',OVERWRITE);                            
+OUTPUT(Denorm_PeopleAll,,'~ODSCWest::OUT::PeopleAll',OVERWRITE);                            
