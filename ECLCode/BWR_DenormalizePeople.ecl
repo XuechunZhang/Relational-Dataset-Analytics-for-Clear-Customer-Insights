@@ -1,34 +1,15 @@
 ﻿IMPORT $;
-Layout_PeopleVehicles := RECORD
-  $.File_People.Layout;
-  UNSIGNED1 ChildVCount;
-  DATASET($.File_Vehicle.Layout) VehicleRecs{MAXCOUNT(20)};
- END;
-
-Layout_PropTax := RECORD
-  $.File_Property.Layout;
-  UNSIGNED1 ChildTaxCount;
-  DATASET($.File_Taxdata.Layout) TaxRecs{MAXCOUNT(20)};
-END;
-
-Layout_PeopleAll := RECORD
-  $.File_People.Layout; 
-  UNSIGNED1 ChildVcount;
-  UNSIGNED1 ChildPcount;
-  DATASET($.File_Vehicle.Layout) VehicleRecs{MAXCOUNT(20)};
-  DATASET(Layout_PropTax) PropRecs{MAXCOUNT(20)};
- END;
  
-Layout_PeopleVehicles ParentMove2($.File_People.Layout Le) := TRANSFORM
+$.Layouts.PeopleVehicles ParentMove2($.File_People.Layout Le) := TRANSFORM
   SELF.ChildVCount := 0;
   SELF.VehicleRecs := [];
   SELF := Le;
  END;
 PVOnly := PROJECT($.File_People.File, ParentMove2(LEFT));
 
-Layout_PeopleVehicles ChildMove2(Layout_PeopleVehicles Le,
-                                 $.File_Vehicle.Layout Ri,
-                                 UNSIGNED1 Cnt):= TRANSFORM
+$.Layouts.PeopleVehicles ChildMove2($.Layouts.PeopleVehicles Le,
+                                    $.File_Vehicle.Layout Ri,
+                                    UNSIGNED1 Cnt):= TRANSFORM
   SELF.ChildVCount := Cnt;
   SELF.VehicleRecs := Le.VehicleRecs + Ri;
   SELF := Le;
@@ -41,14 +22,14 @@ PVDenorm := DENORMALIZE(PVOnly,
 PV_DNOut := OUTPUT(PVDenorm);                        
 
 
- Layout_PropTax ParentMove($.File_Property.Layout Le) := TRANSFORM
+ $.Layouts.PropTax ParentMove($.File_Property.Layout Le) := TRANSFORM
   SELF.ChildTaxCount := 0;
   SELF.TaxRecs    := [];
   SELF := Le;
  END;
  PropTaxOnly := PROJECT($.File_Property.File, ParentMove(LEFT));
  
- Layout_PropTax ChildMove(Layout_PropTax Le, $.File_Taxdata.Layout Ri, INTEGER Cnt):=TRANSFORM
+ $.Layouts.PropTax ChildMove($.Layouts.PropTax Le, $.File_Taxdata.Layout Ri, INTEGER Cnt):=TRANSFORM
   SELF.ChildTaxCount := Cnt;
   SELF.TaxRecs       := Le.TaxRecs + Ri;
   SELF := Le;
@@ -60,16 +41,16 @@ PV_DNOut := OUTPUT(PVDenorm);
                             :PERSIST('~ODSCWest::PERSIST::PropTax');
 PT_DNOut := OUTPUT(DenormProp);
 
-Layout_PeopleAll ParentMove3(Layout_PeopleVehicles Le) := TRANSFORM
+$.Layouts.PeopleAll ParentMove3($.Layouts.PeopleVehicles Le) := TRANSFORM
   SELF.ChildPcount := 0;
   SELF.PropRecs    := [];
   SELF := Le;
  END;
  ParentOnly := PROJECT(PVDenorm, ParentMove3(LEFT));
  
- Layout_PeopleAll ChildMove3(Layout_PeopleAll Le, 
-                             Layout_Proptax Ri, 
-                             INTEGER Cnt):=TRANSFORM
+ $.Layouts.PeopleAll ChildMove3($.Layouts.PeopleAll Le, 
+                                $.Layouts.Proptax Ri, 
+                                INTEGER Cnt):=TRANSFORM
   SELF.ChildPcount := Cnt;
   SELF.PropRecs    := Le.PropRecs + Ri;
   SELF := Le;
