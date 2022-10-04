@@ -1,7 +1,5 @@
 {
     "ecl.forceProxySupport": true,
-    "ecl.launchConfiguration": "localhost",
-    "ecl.targetCluster": {
-        "TrainingCluster": "roxie"
-    }
+    "ecl.launchConfiguration": "PlayCluster",
+    "ecl.targetCluster": {}
 }
