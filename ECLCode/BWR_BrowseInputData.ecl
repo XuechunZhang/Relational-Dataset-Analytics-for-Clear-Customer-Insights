@@ -1,7 +1,7 @@
 ﻿IMPORT $,STD;
 
 OUTPUT($.File_People.File,NAMED('NormPeople'));
-// OUTPUT($.File_PeopleAll.People,NAMED('DNormPeople'));
+OUTPUT($.File_PeopleAll.People,NAMED('DNormPeople'));
 
 OUTPUT($.File_Property.File,NAMED('NormProp'));
 // OUTPUT($.File_PeopleAll.Property,NAMED('DNormProp'));
