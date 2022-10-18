@@ -2,17 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "TrainingCluster",
+            "name": "TestCluster",
             "type": "ecl",
             "request": "launch",
             "protocol": "http",
-            "serverAddress": "training2.hpcc.risk.regn.net",
-            "port": 18010,
+            "serverAddress": "99.79.105.40",
+            "port": 8010,
             "targetCluster": "thor",
             "rejectUnauthorized": true,
             "resultLimit": 100,
             "timeoutSecs": 60,
-            "user": "Bob",
+            "user": "TrainerBob",
             "password": ""
         },
         {

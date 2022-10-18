@@ -20,7 +20,8 @@ OUTPUT(assessmentR);
 // To test new data:
 // predictedValues := myLearnerR.Predict(myModelR, myNewIndData);
 // improve the testing:
-myLearnerR2    := LT.RegressionForest(20,,20,[1]); // Make the zipcode field a nominal (categorical) field.
+myLearnerR2    := LT.RegressionForest(,,,[1]);
+// myLearnerR2    := LT.RegressionForest(20,,20,[1]); // Make the zipcode field a nominal (categorical) field.
 myModelR2      := myLearnerR2.GetModel(IndTrainData,DepTrainData);
 predictedDeps2 := myLearnerR2.Predict(myModelR2,IndTestData);
 OUTPUT(predictedDeps2);//workitem,uniqueid,field number, dependent value
